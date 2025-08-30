@@ -4,231 +4,234 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Teka-Teki Silang (Donghua)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f4f4f4;
-      padding: 20px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      min-height: 100vh;
     }
-    h1 {
-      color: #333;
+    
+    .glass-effect {
+      backdrop-filter: blur(16px);
+      background: rgba(30, 30, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .identity-form {
-      max-width: 500px;
-      margin: 0 auto 20px;
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: left;
+    
+    .gradient-border {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+      padding: 2px;
+      border-radius: 12px;
     }
-    .identity-form label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
+    
+    .gradient-border > div {
+      background: #1f1f1f;
+      border-radius: 10px;
     }
-    .identity-form input {
-      width: 100%;
-      padding: 8px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .identity-form button {
-      margin-top: 15px;
-      padding: 10px 15px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .identity-form button:hover {
-      background-color: #218838;
-    }
-
-    .crossword-container {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 35px);
-      grid-template-rows: repeat(12, 35px);
-      gap: 1px;
-      border: 2px solid #333;
-    }
+    
     .cell {
-      width: 35px;
-      height: 35px;
-      background: white;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: bold;
-      position: relative;
+      transition: all 0.3s ease;
     }
-    .cell.black {
-      background: #000;
+    
+    .cell:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
     }
-    .cell input {
-      width: 80%;
-      height: 80%;
-      border: none;
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
+    
+    .pulse-animation {
+      animation: pulse 2s infinite;
     }
-    .clues {
-      text-align: left;
-      max-width: 350px;
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-    .clue {
-      margin: 8px 0;
-      font-size: 14px;
+    
+    .floating {
+      animation: floating 3s ease-in-out infinite;
     }
-    .clue span {
-      font-weight: bold;
-      color: #0056b3;
+    
+    @keyframes floating {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
     }
-    button.primary {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    
+    .neon-text {
+      text-shadow: 0 0 10px #6366f1, 0 0 20px #6366f1, 0 0 30px #6366f1;
     }
-    button.primary:hover {
-      background-color: #0056b3;
+    
+    .correct-cell {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
     }
-    .feedback {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    .timer {
-      font-size: 18px;
-      margin: 10px 0;
-      font-weight: bold;
-    }
-
-    /* Leaderboard */
-    .leaderboard {
-      margin-top: 30px;
-      width: 100%;
-      max-width: 700px;
-      overflow-x: auto;
-      border-collapse: collapse;
-      margin: 20px auto;
-      display: none;
-    }
-    .leaderboard th {
-      background-color: #007bff;
-      color: white;
-      padding: 10px;
-      text-align: left;
-    }
-    .leaderboard td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-    .leaderboard tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-    .leaderboard tr:hover {
-      background-color: #e9ecef;
-    }
-    .status-correct {
-      color: green;
-      font-weight: bold;
-    }
-    .status-wrong {
-      color: red;
-      font-weight: bold;
-    }
-    .delete-btn {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-    .delete-btn:hover {
-      background-color: #c82333;
+    
+    .incorrect-cell {
+      background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
     }
   </style>
 </head>
-<body>
-  <h1>🎮 Teka-Teki Silang (Donghua)</h1>
+<body class="text-white font-mono">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-5xl font-bold mb-4 neon-text">🎮 Teka-Teki Silang</h1>
+      <p class="text-xl text-gray-300">(Donghua Edition)</p>
+      <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+    </div>
 
-  <!-- Form Identitas: Hanya Discord -->
-  <div class="identity-form">
-    <label for="player-discord">Username Discord:</label>
-    <input type="text" id="player-discord" placeholder="Contoh: @kyotasura">
+    <!-- Identity Form -->
+    <div class="gradient-border max-w-md mx-auto mb-8" id="identity-form">
+      <div class="p-8">
+        <div class="flex items-center justify-center mb-6">
+          <i data-lucide="user" class="w-8 h-8 text-purple-400 mr-3"></i>
+          <h2 class="text-2xl font-bold">Login Player</h2>
+        </div>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              <i data-lucide="at-sign" class="w-4 h-4 inline mr-2"></i>
+              Username Discord:
+            </label>
+            <input 
+              type="text" 
+              id="player-discord" 
+              placeholder="Contoh: @kyotasura"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+            >
+          </div>
+          
+          <button 
+            onclick="startGame()"
+            class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+          >
+            <i data-lucide="play" class="w-5 h-5 mr-2"></i>
+            Mulai Main
+          </button>
+        </div>
+      </div>
+    </div>
 
-    <button onclick="startGame()">Mulai Main</button>
-  </div>
+    <!-- Timer -->
+    <div class="text-center mb-6 hidden" id="timer">
+      <div class="inline-flex items-center glass-effect px-6 py-3 rounded-full">
+        <i data-lucide="timer" class="w-6 h-6 text-yellow-400 mr-3"></i>
+        <span class="text-2xl font-bold">Waktu: <span id="time" class="text-yellow-400">00:00</span></span>
+      </div>
+    </div>
 
-  <!-- Timer -->
-  <div class="timer" id="timer" style="display: none;">Waktu: <span id="time">00:00</span></div>
+    <!-- Game Container -->
+    <div class="flex flex-wrap justify-center gap-8 mb-8 hidden" id="game-container">
+      <!-- Grid -->
+      <div class="gradient-border">
+        <div class="p-6">
+          <div id="crossword-grid" class="grid grid-cols-12 gap-1 w-fit mx-auto"></div>
+        </div>
+      </div>
 
-  <!-- Game TTS -->
-  <div class="crossword-container" id="game-container" style="display: none;">
-    <div class="grid" id="crossword-grid"></div>
+      <!-- Clues -->
+      <div class="glass-effect p-6 rounded-xl max-w-sm">
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <i data-lucide="arrow-right" class="w-5 h-5 text-green-400 mr-2"></i>
+              Petunjuk Mendatar
+            </h3>
+            <div id="across-clues" class="space-y-2"></div>
+          </div>
 
-    <div class="clues">
-      <h3>Petunjuk Mendatar</h3>
-      <div id="across-clues"></div>
+          <div class="border-t border-gray-600 pt-6">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+              <i data-lucide="arrow-down" class="w-5 h-5 text-blue-400 mr-2"></i>
+              Petunjuk Menurun
+            </h3>
+            <div id="down-clues" class="space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <h3>Petunjuk Menurun</h3>
-      <div id="down-clues"></div>
+    <!-- Submit Button -->
+    <div class="text-center mb-6">
+      <button 
+        id="submit-btn" 
+        onclick="submitAnswer()"
+        class="hidden bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 pulse-animation"
+      >
+        <i data-lucide="send" class="w-5 h-5 mr-2 inline"></i>
+        Submit Jawaban
+      </button>
+    </div>
+
+    <!-- Feedback -->
+    <div class="text-center mb-6">
+      <div id="feedback" class="text-xl font-bold"></div>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="text-center mb-6">
+      <button 
+        id="admin-btn"
+        onclick="showAdminLeaderboard()" 
+        class="hidden bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+      >
+        <i data-lucide="shield-check" class="w-5 h-5 mr-2 inline"></i>
+        🔐 Lihat Leaderboard (Admin)
+      </button>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="text-center mb-6">
+      <h2 id="leaderboard-title" class="text-3xl font-bold mb-6 hidden neon-text">
+        <i data-lucide="trophy" class="w-8 h-8 inline mr-3"></i>
+        🏆 Leaderboard
+      </h2>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table id="leaderboard-table" class="hidden w-full glass-effect rounded-xl overflow-hidden">
+        <thead>
+          <tr class="bg-gradient-to-r from-purple-600 to-pink-600">
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="medal" class="w-4 h-4 inline mr-2"></i>
+              Rank
+            </th>
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="user" class="w-4 h-4 inline mr-2"></i>
+              Nama
+            </th>
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="at-sign" class="w-4 h-4 inline mr-2"></i>
+              Discord
+            </th>
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="clock" class="w-4 h-4 inline mr-2"></i>
+              Waktu
+            </th>
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="check-circle" class="w-4 h-4 inline mr-2"></i>
+              Status
+            </th>
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="star" class="w-4 h-4 inline mr-2"></i>
+              Skor
+            </th>
+            <th class="px-6 py-4 text-left font-bold">
+              <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>
+              Aksi
+            </th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
     </div>
   </div>
 
-  <!-- Submit Button -->
-  <button id="submit-btn" class="primary" style="display: none;" onclick="submitAnswer()">
-    Submit Jawaban
-  </button>
-
-  <div class="feedback" id="feedback"></div>
-
-  <!-- Admin Button -->
-  <button onclick="showAdminLeaderboard()" style="background-color: #28a745; margin-top: 20px; display: none;" id="admin-btn">
-    🔐 Lihat Leaderboard (Admin)
-  </button>
-
-  <!-- Leaderboard -->
-  <h2 id="leaderboard-title" style="display: none;">🏆 Leaderboard</h2>
-  <table class="leaderboard" id="leaderboard-table">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Nama</th>
-        <th>Discord</th>
-        <th>Waktu</th>
-        <th>Status</th>
-        <th>Skor</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody id="leaderboard-body"></tbody>
-  </table>
-
   <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
     // === DATA PEMAIN ===
     let player = {
       name: "",    // Akan diisi dengan username Discord
@@ -283,25 +286,49 @@
     solution[4][8] = 'P'; solution[5][8] = 'A'; solution[6][8] = 'N'; solution[7][8] = 'G'; solution[8][8] = ' '; solution[9][8] = 'B'; solution[10][8] = 'A'; solution[11][8] = 'O';
 
     const acrossClues = [
-      { number: 1, clue: "Salah satu MC donghua terpopuler saat ini, dan pernah menggunakan nama samaran (7 huruf)", row: 0, col: 0 },
+      { number: 1, clue: "Salah satu MC donghua terpopuler saat ini, dan pernah menggunakan nama samaran ", row: 0, col: 0 },
       { number: 3, clue: "Apa nama julukan Luo Feng yang paling famous", row: 2, col: 0 },
-      { number: 5, clue: "Siapakah nama wanita yang dekat dengan Luo Feng selain Xu Xin (5 huruf)", row: 4, col: 5 },
-      { number: 7, clue: "Berapa murid Ye Fan (7 huruf)", row: 6, col: 0 },
-      { number: 9, clue: "Sahabat Wang Lin yang paling setia dan humoris (6 huruf)", row: 8, col: 0 },
-      { number: 10, clue: "Sahabat Ye Fan sejak awal perjalanan (8 huruf)", row: 4, col: 8 }
+      { number: 5, clue: "Siapakah nama wanita yang dekat dengan Luo Feng selain Xu Xin ", row: 4, col: 5 },
+      { number: 7, clue: "Berapa murid Ye Fan ", row: 6, col: 0 },
+      { number: 9, clue: "Sahabat Wang Lin yang paling setia dan humoris ", row: 8, col: 0 },
+      { number: 10, clue: "Sahabat Ye Fan sejak awal perjalanan", row: 4, col: 8 }
     ];
 
     const downClues = [
-      { number: 1, clue: "Salah satu MC donghua terpopuler saat ini, dan pernah menggunakan nama samaran (7 huruf)", row: 0, col: 0 },
-      { number: 2, clue: "Pada donghua BTTH perjanjaian 3 tahun ep 5, Xiao Yan membelikan Medusa sepatu dan manisan buah, bagaimana cara Medusa mengkonsumsi manisan tersebut? (5 huruf)", row: 0, col: 3 },
-      { number: 4, clue: "Salah satu wanita yang dekat dengan Xiao Yan dan usia lebih tua darinya (5 huruf)", row: 0, col: 1 },
-      { number: 6, clue: "Nama sistem kultivasi dalam Soul Land yang mengklasifikasikan kekuatan seseorang berdasarkan roh perang (7 huruf)", row: 0, col: 5 },
-      { number: 8, clue: "Apa nama hewan langka yang menjadi tubuh ke dua Shi Hao (11 huruf)", row: 0, col: 9 }
+      { number: 1, clue: "Salah satu MC donghua terpopuler saat ini, dan pernah menggunakan nama samaran ", row: 0, col: 0 },
+      { number: 2, clue: "Pada donghua BTTH perjanjaian 3 tahun ep 5, Xiao Yan membelikan Medusa sepatu dan manisan buah, bagaimana cara Medusa mengkonsumsi manisan tersebut?", row: 0, col: 3 },
+      { number: 4, clue: "Salah satu wanita yang dekat dengan Xiao Yan dan usia lebih tua darinya", row: 0, col: 1 },
+      { number: 6, clue: "Nama sistem kultivasi dalam Soul Land yang mengklasifikasikan kekuatan seseorang berdasarkan roh perang", row: 0, col: 5 },
+      { number: 8, clue: "Apa nama hewan langka yang menjadi tubuh ke dua Shi Hao", row: 0, col: 9 }
     ];
 
     let startTime, endTime;
     let timerInterval;
     let isCorrect = false;
+    let gameStarted = false;
+
+    // === CEK APAKAH SUDAH LOGIN ===
+    function checkLoginStatus() {
+      const savedPlayer = localStorage.getItem("tts-player");
+      const savedStartTime = localStorage.getItem("tts-start-time");
+      
+      if (savedPlayer) {
+        player = JSON.parse(savedPlayer);
+        gameStarted = true;
+        
+        // Tampilkan game
+        document.getElementById("timer").classList.remove("hidden");
+        document.getElementById("game-container").classList.remove("hidden");
+        document.getElementById("submit-btn").classList.remove("hidden");
+        document.getElementById("admin-btn").classList.remove("hidden");
+        document.getElementById("identity-form").classList.add("hidden");
+        
+        // Mulai permainan
+        renderGrid();
+        renderClues();
+        startTimer();
+      }
+    }
 
     // === MULAI GAME ===
     function startGame() {
@@ -315,17 +342,22 @@
       // Gunakan username Discord sebagai nama
       player.name = discord;
       player.discord = discord;
+      
+      // Simpan data pemain
+      localStorage.setItem("tts-player", JSON.stringify(player));
 
       // Simpan waktu mulai ke localStorage
       const now = new Date().getTime();
       localStorage.setItem("tts-start-time", now.toString());
       
+      gameStarted = true;
+      
       // Tampilkan game
-      document.getElementById("timer").style.display = "block";
-      document.getElementById("game-container").style.display = "flex";
-      document.getElementById("submit-btn").style.display = "block";
-      document.getElementById("admin-btn").style.display = "block";
-      document.querySelector(".identity-form").style.display = "none";
+      document.getElementById("timer").classList.remove("hidden");
+      document.getElementById("game-container").classList.remove("hidden");
+      document.getElementById("submit-btn").classList.remove("hidden");
+      document.getElementById("admin-btn").classList.remove("hidden");
+      document.getElementById("identity-form").classList.add("hidden");
 
       // Mulai permainan
       renderGrid();
@@ -341,15 +373,18 @@
       for (let row = 0; row < 12; row++) {
         for (let col = 0; col < 12; col++) {
           const cell = document.createElement("div");
-          cell.className = "cell";
+          cell.className = "cell w-10 h-10 border border-gray-600 flex items-center justify-center font-bold relative transition-all duration-300";
+          
           if (solution[row][col] === null) {
-            cell.classList.add("black");
+            cell.classList.add("bg-gray-900");
           } else {
+            cell.classList.add("bg-gray-700", "hover:bg-gray-600");
             const input = document.createElement("input");
             input.type = "text";
             input.maxLength = 1;
             input.dataset.row = row;
             input.dataset.col = col;
+            input.className = "w-full h-full text-center bg-transparent text-white font-bold text-lg focus:outline-none focus:bg-gray-600";
             input.addEventListener("input", function () {
               this.value = this.value.toUpperCase();
             });
@@ -362,11 +397,7 @@
             if (number) {
               const numLabel = document.createElement("span");
               numLabel.textContent = number.number;
-              numLabel.style.position = "absolute";
-              numLabel.style.top = "2px";
-              numLabel.style.left = "2px";
-              numLabel.style.fontSize = "8px";
-              numLabel.style.color = "blue";
+              numLabel.className = "absolute top-0 left-0.5 text-xs text-blue-400 font-bold";
               cell.appendChild(numLabel);
             }
           }
@@ -383,17 +414,17 @@
       downEl.innerHTML = "";
 
       acrossClues.forEach(clue => {
-        const p = document.createElement("p");
-        p.className = "clue";
-        p.innerHTML = `<span>${clue.number} Mendatar:</span> ${clue.clue}`;
-        acrossEl.appendChild(p);
+        const div = document.createElement("div");
+        div.className = "text-sm bg-gray-800 p-3 rounded-lg border-l-4 border-green-400";
+        div.innerHTML = `<span class="font-bold text-green-400">${clue.number} Mendatar:</span><br><span class="text-gray-300">${clue.clue}</span>`;
+        acrossEl.appendChild(div);
       });
 
       downClues.forEach(clue => {
-        const p = document.createElement("p");
-        p.className = "clue";
-        p.innerHTML = `<span>${clue.number} Menurun:</span> ${clue.clue}`;
-        downEl.appendChild(p);
+        const div = document.createElement("div");
+        div.className = "text-sm bg-gray-800 p-3 rounded-lg border-l-4 border-blue-400";
+        div.innerHTML = `<span class="font-bold text-blue-400">${clue.number} Menurun:</span><br><span class="text-gray-300">${clue.clue}</span>`;
+        downEl.appendChild(div);
       });
     }
 
@@ -431,11 +462,12 @@
 
         if (correctChar !== null) {
           totalLetters++;
+          const cell = input.parentElement;
           if (user === correctChar) {
             correctCount++;
-            input.style.backgroundColor = "#d4edda";
+            cell.classList.add("correct-cell");
           } else {
-            input.style.backgroundColor = "#f8d7da";
+            cell.classList.add("incorrect-cell");
           }
         }
       });
@@ -444,18 +476,39 @@
       endTime = new Date();
       clearInterval(timerInterval);
 
-      // Hapus waktu mulai dari localStorage setelah selesai
+      // Hapus data dari localStorage setelah selesai
       localStorage.removeItem("tts-start-time");
+      localStorage.removeItem("tts-player");
 
       const feedback = document.getElementById("feedback");
       if (isCorrect) {
-        feedback.innerHTML = "🎉 <b>Semua jawaban benar!</b>";
+        feedback.innerHTML = `
+          <div class="glass-effect p-6 rounded-xl inline-block">
+            <div class="flex items-center text-green-400">
+              <i data-lucide="check-circle" class="w-8 h-8 mr-3"></i>
+              <span class="text-2xl">🎉 Semua jawaban benar!</span>
+            </div>
+          </div>
+        `;
       } else {
         const accuracy = ((correctCount / totalLetters) * 100).toFixed(1);
-        feedback.innerHTML = `❌ <b>${correctCount}/${totalLetters}</b> huruf benar. Akurasi: <b>${accuracy}%</b>.`;
+        feedback.innerHTML = `
+          <div class="glass-effect p-6 rounded-xl inline-block">
+            <div class="flex items-center text-red-400">
+              <i data-lucide="x-circle" class="w-8 h-8 mr-3"></i>
+              <span class="text-2xl">❌ ${correctCount}/${totalLetters} huruf benar. Akurasi: ${accuracy}%</span>
+            </div>
+          </div>
+        `;
       }
 
+      // Re-initialize Lucide icons for new elements
+      lucide.createIcons();
+
       saveToLeaderboard();
+      
+      // Reset game state
+      gameStarted = false;
     }
 
     // === SIMPAN KE LEADERBOARD ===
@@ -510,17 +563,28 @@
         const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
 
         const tr = document.createElement("tr");
+        tr.className = "border-b border-gray-600 hover:bg-gray-800 transition-colors";
         tr.innerHTML = `
-          <td><b>${medal}</b></td>
-          <td>${entry.name}</td>
-          <td><code>${entry.discord}</code></td>
-          <td>${entry.time}s</td>
-          <td class="${entry.status === 'Benar' ? 'status-correct' : 'status-wrong'}">
-            ${entry.status}
+          <td class="px-6 py-4 font-bold text-yellow-400">${medal}</td>
+          <td class="px-6 py-4">${entry.name}</td>
+          <td class="px-6 py-4">
+            <code class="bg-gray-700 px-2 py-1 rounded text-cyan-400">${entry.discord}</code>
           </td>
-          <td><b>${entry.score}</b></td>
-          <td><button class="delete-btn" onclick="deleteEntry(this)">🗑️ Hapus</button></td>
-        `;
+          <td class="px-6 py-4 text-orange-400 font-bold">${entry.time}s</td>
+          <td class="px-6 py-4">
+            <span class="${entry.status === 'Benar' ? 'text-green-400' : 'text-red-400'} font-bold flex items-center">
+              <i data-lucide="${entry.status === 'Benar' ? 'check' : 'x'}" class="w-4 h-4 mr-2"></i>
+              ${entry.status}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-purple-400 font-bold">${entry.score}</td>
+          <td class="px-6 py-4">
+            <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg transition-all flex items-center" onclick="deleteEntry(this)">
+              <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
+              Hapus
+            </button>
+          </td>
+          `;
         tbody.appendChild(tr);
       });
 
@@ -552,6 +616,11 @@
     // === HANDLE TAB/APP SWITCH ===
     window.addEventListener('beforeunload', function() {
       // Timer tetap berjalan karena menggunakan localStorage
+    });
+
+    // === CEK STATUS LOGIN SAAT HALAMAN DIMUAT ===
+    window.addEventListener('load', function() {
+      checkLoginStatus();
     });
   </script>
 </body>
