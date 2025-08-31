@@ -381,12 +381,32 @@
             cell.classList.add("bg-gray-700", "hover:bg-gray-600");
             const input = document.createElement("input");
             input.type = "text";
-            input.maxLength = 1;
+            input.maxLength = 1; // Hanya satu karakter
             input.dataset.row = row;
             input.dataset.col = col;
             input.className = "w-full h-full text-center bg-transparent text-white font-bold text-lg focus:outline-none focus:bg-gray-600";
+            // Event listener untuk membatasi input hanya satu huruf dan otomatis uppercase
             input.addEventListener("input", function () {
-              this.value = this.value.toUpperCase();
+              // Ambil hanya karakter pertama dan ubah ke uppercase
+              this.value = this.value.toUpperCase().slice(0, 1);
+            });
+            // Event listener untuk navigasi dengan keyboard
+            input.addEventListener("keydown", function(e) {
+              if (e.key === "Backspace" && this.value === "") {
+                // Pindah ke kotak sebelumnya jika ada
+                const prevCell = this.parentElement.previousElementSibling;
+                if (prevCell && prevCell.querySelector("input")) {
+                  prevCell.querySelector("input").focus();
+                }
+              } else if (e.key.match(/[a-zA-Z]/)) {
+                // Pindah ke kotak berikutnya setelah mengetik
+                setTimeout(() => {
+                  const nextCell = this.parentElement.nextElementSibling;
+                  if (nextCell && nextCell.querySelector("input")) {
+                    nextCell.querySelector("input").focus();
+                  }
+                }, 10);
+              }
             });
             cell.appendChild(input);
 
